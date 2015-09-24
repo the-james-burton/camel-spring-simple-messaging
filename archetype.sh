@@ -5,4 +5,4 @@ mvn archetype:generate \
 -DgroupId=org.jimsey.projects \
 -DartifactId=camel-spring-simple-messaging-component \
 -Dname=CamelSpringSimpleMessaging             \
--Dscheme=simpmsg    
+-Dscheme=springsm

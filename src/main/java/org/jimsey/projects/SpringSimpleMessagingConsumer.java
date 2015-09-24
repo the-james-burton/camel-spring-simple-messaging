@@ -9,10 +9,10 @@ import org.apache.camel.impl.ScheduledPollConsumer;
 /**
  * The CamelSpringSimpleMessaging consumer.
  */
-public class CamelSpringSimpleMessagingConsumer extends ScheduledPollConsumer {
-    private final CamelSpringSimpleMessagingEndpoint endpoint;
+public class SpringSimpleMessagingConsumer extends ScheduledPollConsumer {
+    private final SpringSimpleMessagingEndpoint endpoint;
 
-    public CamelSpringSimpleMessagingConsumer(CamelSpringSimpleMessagingEndpoint endpoint, Processor processor) {
+    public SpringSimpleMessagingConsumer(SpringSimpleMessagingEndpoint endpoint, Processor processor) {
         super(endpoint, processor);
         this.endpoint = endpoint;
     }

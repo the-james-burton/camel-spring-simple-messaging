@@ -8,11 +8,11 @@ import org.slf4j.LoggerFactory;
 /**
  * The CamelSpringSimpleMessaging producer.
  */
-public class CamelSpringSimpleMessagingProducer extends DefaultProducer {
-    private static final Logger LOG = LoggerFactory.getLogger(CamelSpringSimpleMessagingProducer.class);
-    private CamelSpringSimpleMessagingEndpoint endpoint;
+public class SpringSimpleMessagingProducer extends DefaultProducer {
+    private static final Logger LOG = LoggerFactory.getLogger(SpringSimpleMessagingProducer.class);
+    private SpringSimpleMessagingEndpoint endpoint;
 
-    public CamelSpringSimpleMessagingProducer(CamelSpringSimpleMessagingEndpoint endpoint) {
+    public SpringSimpleMessagingProducer(SpringSimpleMessagingEndpoint endpoint) {
         super(endpoint);
         this.endpoint = endpoint;
     }

@@ -14,38 +14,49 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <camel.version>2.15.3</camel.version>
+    <spring.version>4.1.7.RELEASE</spring.version>
+    <slf4j.version>1.7.12</slf4j.version>
+    <log4j.version>1.2.17</log4j.version>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-core</artifactId>
-      <version>2.15.3</version>
+      <version>${camel.version}</version>
     </dependency>
     
     <!-- support camel documentation -->
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>apt</artifactId>
-      <version>2.15.3</version>
+      <version>${camel.version}</version>
+    </dependency>
+
+    <!-- spring -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-messaging</artifactId>
+      <version>${spring.version}</version>    
     </dependency>
 
     <!-- logging -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.7.12</version>
+      <version>${slf4j.version}</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
-      <version>1.7.12</version>
+      <version>${slf4j.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
-      <version>1.2.17</version>
+      <version>${log4j.version}</version>
       <scope>test</scope>
     </dependency>
 
@@ -53,7 +64,7 @@
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-test</artifactId>
-      <version>2.15.3</version>
+      <version>${camel.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -72,7 +83,7 @@
           <target>1.7</target>
         </configuration>
       </plugin>
-      
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
@@ -91,7 +102,7 @@
         <configuration>
           <instructions>
             <Bundle-SymbolicName>org.jimsey.projects.camel-spring-simple-messaging</Bundle-SymbolicName>
-            <Export-Service>org.apache.camel.spi.ComponentResolver;component=simpmsg</Export-Service>
+            <Export-Service>org.apache.camel.spi.ComponentResolver;component=springsm</Export-Service>
           </instructions>
         </configuration>
       </plugin>
