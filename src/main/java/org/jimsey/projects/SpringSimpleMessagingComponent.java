@@ -33,7 +33,7 @@ public class SpringSimpleMessagingComponent extends UriEndpointComponent {
     SpringSimpleMessagingEndpoint endpoint = new SpringSimpleMessagingEndpoint(uri, this);
     setProperties(endpoint, parameters);
     endpoint.setMessageSendingOperations(mso);
-    endpoint.setDestination(remaining);
+    endpoint.setDestination("/".concat(remaining));
     return endpoint;
   }
 

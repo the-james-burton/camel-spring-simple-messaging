@@ -5,6 +5,7 @@ import java.util.Map;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultProducer;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +28,14 @@ public class SpringSimpleMessagingProducer extends DefaultProducer {
     Message message = exchange.getIn();
     Object payload = message.getBody();
     Map<String, Object> headers = message.getHeaders();
+    if (LOG.isDebugEnabled()) {
+      try {
+        LOG.debug("body: {}", payload);
+        LOG.debug("headers: {}", new JSONObject(headers));
+      } catch (Exception e) {
+        LOG.error("error trying to log body or header: {}", e.getMessage());
+      }
+    }
     endpoint.getMessageSendingOperations().convertAndSend(destination, payload, headers);
   }
 

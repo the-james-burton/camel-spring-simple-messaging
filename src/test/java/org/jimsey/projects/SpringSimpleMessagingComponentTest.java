@@ -1,7 +1,13 @@
 package org.jimsey.projects;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Matchers.anyMapOf;
+import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
@@ -32,23 +38,32 @@ public class SpringSimpleMessagingComponentTest extends CamelTestSupport {
   @Test
   public void testCamelSpringSimpleMessaging() throws Exception {
 
+    // TODO use lambda when upgraded to java 8...
     doAnswer(new Answer() {
 
       @Override
       public Object answer(InvocationOnMock invocation) throws Throwable {
         Object args[] = invocation.getArguments();
         for (Object arg : args) {
-          logger.info(arg.toString());
+          logger.info(arg == null ? "" : arg.toString());
         }
         return null;
       }
 
     }).when(mso).convertAndSend(anyString(), anyObject(), anyMapOf(String.class, Object.class));
 
-    producer.sendBody("my test body");
+    String body = "test-body";
+    String key = "test-header-key";
+    String value = "test-header-value";
+
+    Map<String, Object> headers = new HashMap<>();
+    headers.put(key, value);
 
     MockEndpoint mock = getMockEndpoint("mock:result");
-    mock.expectedMinimumMessageCount(1);
+    mock.expectedMessageCount(1);
+    mock.expectedBodiesReceived(body);
+
+    producer.sendBodyAndHeaders(body, headers);
 
     assertMockEndpointsSatisfied();
   }
@@ -61,7 +76,8 @@ public class SpringSimpleMessagingComponentTest extends CamelTestSupport {
     return new RouteBuilder() {
       public void configure() {
         from("direct://start")
-            .to("test-springsm://test-uri")
+            .to("test-springsm://test/uri")
+            .to(String.format("log:%s?level=INFO&showBody=true&showHeaders=true", this.getClass().getName()))
             .to("mock:result");
       }
     };
