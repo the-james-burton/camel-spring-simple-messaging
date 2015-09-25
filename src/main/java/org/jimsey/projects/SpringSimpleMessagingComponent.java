@@ -16,10 +16,10 @@ public class SpringSimpleMessagingComponent extends UriEndpointComponent {
   private SimpMessageSendingOperations mso;
 
   /** main constructor to use */
-  // public SpringSimpleMessagingComponent(SimpMessageSendingOperations mso) {
-  // this();
-  // this.setMso(mso);
-  // }
+  public SpringSimpleMessagingComponent(SimpMessageSendingOperations mso) {
+    this();
+    this.setMso(mso);
+  }
 
   public SpringSimpleMessagingComponent() {
     super(SpringSimpleMessagingEndpoint.class);
@@ -30,8 +30,10 @@ public class SpringSimpleMessagingComponent extends UriEndpointComponent {
   }
 
   protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
-    Endpoint endpoint = new SpringSimpleMessagingEndpoint(uri, this);
+    SpringSimpleMessagingEndpoint endpoint = new SpringSimpleMessagingEndpoint(uri, this);
     setProperties(endpoint, parameters);
+    endpoint.setMessageSendingOperations(mso);
+    endpoint.setDestination(remaining);
     return endpoint;
   }
 

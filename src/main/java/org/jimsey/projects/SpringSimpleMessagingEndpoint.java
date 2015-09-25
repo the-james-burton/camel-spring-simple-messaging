@@ -8,6 +8,7 @@ import org.apache.camel.spi.Metadata;
 import org.apache.camel.spi.UriEndpoint;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriPath;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 
 /**
  * Represents a CamelSpringSimpleMessaging endpoint.
@@ -21,6 +22,12 @@ public class SpringSimpleMessagingEndpoint extends DefaultEndpoint {
 
   @UriParam(defaultValue = "10")
   private int option = 10;
+
+  /** the spring simple messaging template to use when sending messages */
+  private SimpMessageSendingOperations mso;
+
+  /** the destination **/
+  private String destination;
 
   public SpringSimpleMessagingEndpoint() {
   }
@@ -45,6 +52,7 @@ public class SpringSimpleMessagingEndpoint extends DefaultEndpoint {
     return true;
   }
 
+  // -----------------------------------
   public void setName(String name) {
     this.name = name;
   }
@@ -59,5 +67,21 @@ public class SpringSimpleMessagingEndpoint extends DefaultEndpoint {
 
   public int getOption() {
     return option;
+  }
+
+  public SimpMessageSendingOperations getMessageSendingOperations() {
+    return mso;
+  }
+
+  public void setMessageSendingOperations(SimpMessageSendingOperations mso) {
+    this.mso = mso;
+  }
+
+  public String getDestination() {
+    return destination;
+  }
+
+  public void setDestination(String destination) {
+    this.destination = destination;
   }
 }
