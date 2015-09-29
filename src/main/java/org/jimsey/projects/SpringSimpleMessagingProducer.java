@@ -27,7 +27,11 @@ public class SpringSimpleMessagingProducer extends DefaultProducer {
     Message message = exchange.getIn();
     Object payload = message.getBody();
     Map<String, Object> headers = message.getHeaders();
-    String destinationSuffix = headers.get(endpoint.getDestinationSuffixHeader()).toString();
+    String destinationSuffix = "";
+    if (endpoint.getDestinationSuffixHeader() != null && headers.containsKey(endpoint.getDestinationSuffixHeader())) {
+      destinationSuffix = headers.get(endpoint.getDestinationSuffixHeader()).toString();
+      message.removeHeader(endpoint.getDestinationSuffixHeader());
+    }
     String destination = endpoint.getDestination().concat(destinationSuffix);
     if (LOG.isDebugEnabled()) {
       try {

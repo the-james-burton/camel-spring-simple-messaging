@@ -7,6 +7,7 @@ import static org.mockito.Mockito.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.camel.Exchange;
 import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
@@ -19,7 +20,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 
-public class SpringSimpleMessagingComponentTest extends CamelTestSupport {
+public class NoSuffixNoUserTest extends CamelTestSupport {
 
   SimpMessageSendingOperations mso;
 
@@ -27,10 +28,6 @@ public class SpringSimpleMessagingComponentTest extends CamelTestSupport {
   ProducerTemplate producer;
 
   private final String expectedDestination = "test/uri";
-
-  private final String expectedDestinationSuffixHeaderKey = "suffix";
-
-  private final String expectedDestinationSuffixHeaderValue = ".test.suffix";
 
   private final Object expectedBody = "test-body";
 
@@ -43,20 +40,54 @@ public class SpringSimpleMessagingComponentTest extends CamelTestSupport {
   }
 
   @Test
-  public void testCamelSpringSimpleMessaging() throws Exception {
+  public void noSuffixNoUserNoHeadersTest() throws Exception {
 
     // TODO use lambda when upgraded to java 8...
-    doAnswer(new Answer() {
+    doAnswer(new Answer<Void>() {
 
       @Override
-      public Object answer(InvocationOnMock invocation) throws Throwable {
+      public Void answer(InvocationOnMock invocation) throws Throwable {
         String receivedDestination = invocation.getArgumentAt(0, String.class);
         Object receivedBody = invocation.getArgumentAt(1, Object.class);
         Map<String, Object> receivedHeaders = invocation.getArgumentAt(2, Map.class);
         log.info("mso.conversAndSend('{}', '{}', {}",
             receivedDestination, receivedBody.toString(), new JSONObject(receivedHeaders));
 
-        assertThat(receivedDestination, equalTo(String.format("/%s%s", expectedDestination, expectedDestinationSuffixHeaderValue)));
+        assertThat(receivedDestination, equalTo(String.format("/%s", expectedDestination)));
+        assertThat(receivedBody.toString(), equalTo(expectedBody.toString()));
+        assertThat(receivedHeaders, hasKey(equalTo(Exchange.BREADCRUMB_ID)));
+        assertThat(receivedHeaders.keySet(), hasSize(1));
+
+        //
+        return null;
+      }
+
+    }).when(mso).convertAndSend(anyString(), anyObject(), anyMapOf(String.class, Object.class));
+
+    MockEndpoint mock = getMockEndpoint("mock:result");
+    mock.expectedMessageCount(1);
+    mock.expectedBodiesReceived(expectedBody);
+
+    producer.sendBody(expectedBody);
+
+    assertMockEndpointsSatisfied();
+  }
+
+  @Test
+  public void noSuffixNoUserWithHeadersTest() throws Exception {
+
+    // TODO use lambda when upgraded to java 8...
+    doAnswer(new Answer<Void>() {
+
+      @Override
+      public Void answer(InvocationOnMock invocation) throws Throwable {
+        String receivedDestination = invocation.getArgumentAt(0, String.class);
+        Object receivedBody = invocation.getArgumentAt(1, Object.class);
+        Map<String, Object> receivedHeaders = invocation.getArgumentAt(2, Map.class);
+        log.info("mso.conversAndSend('{}', '{}', {}",
+            receivedDestination, receivedBody.toString(), new JSONObject(receivedHeaders));
+
+        assertThat(receivedDestination, equalTo(String.format("/%s", expectedDestination)));
         assertThat(receivedBody.toString(), equalTo(expectedBody.toString()));
         assertThat(receivedHeaders, hasEntry(equalTo(expectedHeaderKey), equalTo(expectedHeaderValue)));
 
@@ -68,7 +99,6 @@ public class SpringSimpleMessagingComponentTest extends CamelTestSupport {
 
     Map<String, Object> headers = new HashMap<>();
     headers.put(expectedHeaderKey, expectedHeaderValue);
-    headers.put(expectedDestinationSuffixHeaderKey, expectedDestinationSuffixHeaderValue);
 
     MockEndpoint mock = getMockEndpoint("mock:result");
     mock.expectedMessageCount(1);
@@ -88,8 +118,7 @@ public class SpringSimpleMessagingComponentTest extends CamelTestSupport {
     return new RouteBuilder() {
       public void configure() {
         from("direct://start")
-            .to(String.format("test-springsm://%s?destinationSuffixHeader=%s",
-                expectedDestination, expectedDestinationSuffixHeaderKey))
+            .to(String.format("test-springsm://%s", expectedDestination))
             .to(String.format("log:%s?level=INFO&showBody=true&showHeaders=true", this.getClass().getName()))
             .to("mock:result");
       }

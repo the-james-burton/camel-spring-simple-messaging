@@ -33,6 +33,10 @@ public class SpringSimpleMessagingEndpoint extends DefaultEndpoint {
   @UriParam
   private String destinationSuffixHeader;
 
+  /** the header in which to find the user, optional **/
+  @UriParam
+  private String userHeader;
+
   public SpringSimpleMessagingEndpoint() {
   }
 
@@ -96,6 +100,14 @@ public class SpringSimpleMessagingEndpoint extends DefaultEndpoint {
 
   public void setDestinationSuffixHeader(String destinationSuffixHeader) {
     this.destinationSuffixHeader = destinationSuffixHeader;
+  }
+
+  public String getUserHeader() {
+    return userHeader;
+  }
+
+  public void setUserHeader(String userHeader) {
+    this.userHeader = userHeader;
   }
 
 }
