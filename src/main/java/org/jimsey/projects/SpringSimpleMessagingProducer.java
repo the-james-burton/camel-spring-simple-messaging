@@ -24,14 +24,15 @@ public class SpringSimpleMessagingProducer extends DefaultProducer {
 
   public void process(Exchange exchange) throws Exception {
     // System.out.println(exchange.getIn().getBody());
-    String destination = endpoint.getDestination();
     Message message = exchange.getIn();
     Object payload = message.getBody();
     Map<String, Object> headers = message.getHeaders();
+    String destinationSuffix = headers.get(endpoint.getDestinationSuffixHeader()).toString();
+    String destination = endpoint.getDestination().concat(destinationSuffix);
     if (LOG.isDebugEnabled()) {
       try {
-        LOG.debug("body: {}", payload);
-        LOG.debug("headers: {}", new JSONObject(headers));
+        LOG.debug("seding message: {\"destination\":{}, \"payload\":{}, \"headers\":{}}",
+            destination, payload, new JSONObject(headers));
       } catch (Exception e) {
         LOG.error("error trying to log body or header: {}", e.getMessage());
       }

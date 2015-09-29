@@ -1,10 +1,8 @@
 package org.jimsey.projects;
 
-import static org.mockito.Matchers.anyMapOf;
-import static org.mockito.Matchers.anyObject;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,22 +12,31 @@ import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 
 public class SpringSimpleMessagingComponentTest extends CamelTestSupport {
-
-  private static final Logger logger = LoggerFactory.getLogger(SpringSimpleMessagingComponentTest.class);
 
   SimpMessageSendingOperations mso;
 
   @Produce(uri = "direct:start")
   ProducerTemplate producer;
+
+  private final String expectedDestination = "test/uri";
+
+  private final String expectedDestinationSuffixHeaderKey = "suffix";
+
+  private final String expectedDestinationSuffixHeaderValue = ".test.suffix";
+
+  private final Object expectedBody = "test-body";
+
+  private final String expectedHeaderKey = "test-header-key";
+
+  private final Object expectedHeaderValue = "test-header-value";
 
   @Before
   public void setup() {
@@ -43,27 +50,32 @@ public class SpringSimpleMessagingComponentTest extends CamelTestSupport {
 
       @Override
       public Object answer(InvocationOnMock invocation) throws Throwable {
-        Object args[] = invocation.getArguments();
-        for (Object arg : args) {
-          logger.info(arg == null ? "" : arg.toString());
-        }
+        String receivedDestination = invocation.getArgumentAt(0, String.class);
+        Object receivedBody = invocation.getArgumentAt(1, Object.class);
+        Map<String, Object> receivedHeaders = invocation.getArgumentAt(2, Map.class);
+        log.info("mso.conversAndSend('{}', '{}', {}",
+            receivedDestination, receivedBody.toString(), new JSONObject(receivedHeaders));
+
+        assertThat(receivedDestination, equalTo(String.format("/%s%s", expectedDestination, expectedDestinationSuffixHeaderValue)));
+        assertThat(receivedBody.toString(), equalTo(expectedBody.toString()));
+        assertThat(receivedHeaders, hasEntry(equalTo(expectedHeaderKey), equalTo(expectedHeaderValue)));
+
+        //
         return null;
       }
 
     }).when(mso).convertAndSend(anyString(), anyObject(), anyMapOf(String.class, Object.class));
 
-    String body = "test-body";
-    String key = "test-header-key";
-    String value = "test-header-value";
-
     Map<String, Object> headers = new HashMap<>();
-    headers.put(key, value);
+    headers.put(expectedHeaderKey, expectedHeaderValue);
+    headers.put(expectedDestinationSuffixHeaderKey, expectedDestinationSuffixHeaderValue);
 
     MockEndpoint mock = getMockEndpoint("mock:result");
     mock.expectedMessageCount(1);
-    mock.expectedBodiesReceived(body);
+    mock.expectedBodiesReceived(expectedBody);
+    mock.expectedHeaderReceived(expectedHeaderKey, expectedHeaderValue);
 
-    producer.sendBodyAndHeaders(body, headers);
+    producer.sendBodyAndHeaders(expectedBody, headers);
 
     assertMockEndpointsSatisfied();
   }
@@ -76,7 +88,8 @@ public class SpringSimpleMessagingComponentTest extends CamelTestSupport {
     return new RouteBuilder() {
       public void configure() {
         from("direct://start")
-            .to("test-springsm://test/uri")
+            .to(String.format("test-springsm://%s?destinationSuffixHeader=%s",
+                expectedDestination, expectedDestinationSuffixHeaderKey))
             .to(String.format("log:%s?level=INFO&showBody=true&showHeaders=true", this.getClass().getName()))
             .to("mock:result");
       }

@@ -14,7 +14,7 @@ import org.springframework.messaging.simp.SimpMessageSendingOperations;
  * Represents a CamelSpringSimpleMessaging endpoint.
  */
 @UriEndpoint(scheme = "springsm", title = "CamelSpringSimpleMessaging", syntax = "springsm:name",
-    consumerClass = SpringSimpleMessagingConsumer.class, label = "CamelSpringSimpleMessaging")
+    label = "CamelSpringSimpleMessaging", producerOnly = true)
 public class SpringSimpleMessagingEndpoint extends DefaultEndpoint {
   @UriPath
   @Metadata(required = "true")
@@ -28,6 +28,10 @@ public class SpringSimpleMessagingEndpoint extends DefaultEndpoint {
 
   /** the destination **/
   private String destination;
+
+  /** the header in which to find the destination suffix, optional **/
+  @UriParam
+  private String destinationSuffixHeader;
 
   public SpringSimpleMessagingEndpoint() {
   }
@@ -45,7 +49,8 @@ public class SpringSimpleMessagingEndpoint extends DefaultEndpoint {
   }
 
   public Consumer createConsumer(Processor processor) throws Exception {
-    return new SpringSimpleMessagingConsumer(this, processor);
+    throw new UnsupportedOperationException(
+        "You cannot receive messages tfrom this endpoint:" + getEndpointUri());
   }
 
   public boolean isSingleton() {
@@ -84,4 +89,13 @@ public class SpringSimpleMessagingEndpoint extends DefaultEndpoint {
   public void setDestination(String destination) {
     this.destination = destination;
   }
+
+  public String getDestinationSuffixHeader() {
+    return destinationSuffixHeader;
+  }
+
+  public void setDestinationSuffixHeader(String destinationSuffixHeader) {
+    this.destinationSuffixHeader = destinationSuffixHeader;
+  }
+
 }
