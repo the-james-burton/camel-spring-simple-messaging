@@ -12,28 +12,19 @@ import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.camel.test.junit4.CamelTestSupport;
-import org.json.JSONObject;
+import org.jimsey.projects.pojo.ConvertAndSendCall;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 
-public class NoSuffixNoUserTest extends CamelTestSupport {
+public class NoSuffixNoUserTest extends AbstractTestBase {
 
   SimpMessageSendingOperations mso;
 
   @Produce(uri = "direct:start")
   ProducerTemplate producer;
-
-  private final String expectedDestination = "test/uri";
-
-  private final Object expectedBody = "test-body";
-
-  private final String expectedHeaderKey = "test-header-key";
-
-  private final Object expectedHeaderValue = "test-header-value";
 
   @Before
   public void setup() {
@@ -47,18 +38,13 @@ public class NoSuffixNoUserTest extends CamelTestSupport {
 
       @Override
       public Void answer(InvocationOnMock invocation) throws Throwable {
-        String receivedDestination = invocation.getArgumentAt(0, String.class);
-        Object receivedBody = invocation.getArgumentAt(1, Object.class);
-        Map<String, Object> receivedHeaders = invocation.getArgumentAt(2, Map.class);
-        log.info("mso.conversAndSend('{}', '{}', {}",
-            receivedDestination, receivedBody.toString(), new JSONObject(receivedHeaders));
+        ConvertAndSendCall received = extractConvertAndSendParameters(invocation);
+        assertThat(received.getDestination(),
+            equalTo(String.format("/%s", expectedDestination)));
+        assertThat(received.getBody().toString(), equalTo(expectedBody.toString()));
+        assertThat(received.getHeaders(), hasKey(equalTo(Exchange.BREADCRUMB_ID)));
+        assertThat(received.getHeaders().keySet(), hasSize(1));
 
-        assertThat(receivedDestination, equalTo(String.format("/%s", expectedDestination)));
-        assertThat(receivedBody.toString(), equalTo(expectedBody.toString()));
-        assertThat(receivedHeaders, hasKey(equalTo(Exchange.BREADCRUMB_ID)));
-        assertThat(receivedHeaders.keySet(), hasSize(1));
-
-        //
         return null;
       }
 
@@ -81,15 +67,10 @@ public class NoSuffixNoUserTest extends CamelTestSupport {
 
       @Override
       public Void answer(InvocationOnMock invocation) throws Throwable {
-        String receivedDestination = invocation.getArgumentAt(0, String.class);
-        Object receivedBody = invocation.getArgumentAt(1, Object.class);
-        Map<String, Object> receivedHeaders = invocation.getArgumentAt(2, Map.class);
-        log.info("mso.conversAndSend('{}', '{}', {}",
-            receivedDestination, receivedBody.toString(), new JSONObject(receivedHeaders));
-
-        assertThat(receivedDestination, equalTo(String.format("/%s", expectedDestination)));
-        assertThat(receivedBody.toString(), equalTo(expectedBody.toString()));
-        assertThat(receivedHeaders, hasEntry(equalTo(expectedHeaderKey), equalTo(expectedHeaderValue)));
+        ConvertAndSendCall received = extractConvertAndSendParameters(invocation);
+        assertThat(received.getDestination(), equalTo(String.format("/%s", expectedDestination)));
+        assertThat(received.getBody().toString(), equalTo(expectedBody.toString()));
+        assertThat(received.getHeaders(), hasEntry(equalTo(expectedHeaderKey), equalTo(expectedHeaderValue)));
 
         //
         return null;

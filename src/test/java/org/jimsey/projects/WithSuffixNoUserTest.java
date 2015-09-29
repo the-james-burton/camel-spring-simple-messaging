@@ -11,15 +11,14 @@ import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.apache.camel.test.junit4.CamelTestSupport;
-import org.json.JSONObject;
+import org.jimsey.projects.pojo.ConvertAndSendCall;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 
-public class WithSuffixNoUserTest extends CamelTestSupport {
+public class WithSuffixNoUserTest extends AbstractTestBase {
 
   SimpMessageSendingOperations mso;
 
@@ -50,16 +49,12 @@ public class WithSuffixNoUserTest extends CamelTestSupport {
 
       @Override
       public Void answer(InvocationOnMock invocation) throws Throwable {
-        String receivedDestination = invocation.getArgumentAt(0, String.class);
-        Object receivedBody = invocation.getArgumentAt(1, Object.class);
-        Map<String, Object> receivedHeaders = invocation.getArgumentAt(2, Map.class);
-        log.info("mso.conversAndSend('{}', '{}', {}",
-            receivedDestination, receivedBody.toString(), new JSONObject(receivedHeaders));
-
-        assertThat(receivedDestination, equalTo(String.format("/%s%s", expectedDestination, expectedDestinationSuffixHeaderValue)));
-        assertThat(receivedBody.toString(), equalTo(expectedBody.toString()));
-        assertThat(receivedHeaders, hasEntry(equalTo(expectedHeaderKey), equalTo(expectedHeaderValue)));
-        assertThat(receivedHeaders, not(hasKey(equalTo(expectedDestinationSuffixHeaderKey))));
+        ConvertAndSendCall received = extractConvertAndSendParameters(invocation);
+        assertThat(received.getDestination(),
+            equalTo(String.format("/%s%s", expectedDestination, expectedDestinationSuffixHeaderValue)));
+        assertThat(received.getBody().toString(), equalTo(expectedBody.toString()));
+        assertThat(received.getHeaders(), hasEntry(equalTo(expectedHeaderKey), equalTo(expectedHeaderValue)));
+        assertThat(received.getHeaders(), not(hasKey(equalTo(expectedDestinationSuffixHeaderKey))));
 
         return null;
       }
