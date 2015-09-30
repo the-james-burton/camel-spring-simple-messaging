@@ -40,8 +40,8 @@ public class NoSuffixNoUserTest extends AbstractTestBase {
       public Void answer(InvocationOnMock invocation) throws Throwable {
         ConvertAndSendCall received = extractConvertAndSendParameters(invocation);
         assertThat(received.getDestination(),
-            equalTo(String.format("/%s", expectedDestination)));
-        assertThat(received.getBody().toString(), equalTo(expectedBody.toString()));
+            equalTo(String.format("/%s", destination)));
+        assertThat(received.getBody().toString(), equalTo(body.toString()));
         assertThat(received.getHeaders(), hasKey(equalTo(Exchange.BREADCRUMB_ID)));
         assertThat(received.getHeaders().keySet(), hasSize(1));
 
@@ -52,9 +52,9 @@ public class NoSuffixNoUserTest extends AbstractTestBase {
 
     MockEndpoint mock = getMockEndpoint("mock:result");
     mock.expectedMessageCount(1);
-    mock.expectedBodiesReceived(expectedBody);
+    mock.expectedBodiesReceived(body);
 
-    producer.sendBody(expectedBody);
+    producer.sendBody(body);
 
     assertMockEndpointsSatisfied();
   }
@@ -68,9 +68,9 @@ public class NoSuffixNoUserTest extends AbstractTestBase {
       @Override
       public Void answer(InvocationOnMock invocation) throws Throwable {
         ConvertAndSendCall received = extractConvertAndSendParameters(invocation);
-        assertThat(received.getDestination(), equalTo(String.format("/%s", expectedDestination)));
-        assertThat(received.getBody().toString(), equalTo(expectedBody.toString()));
-        assertThat(received.getHeaders(), hasEntry(equalTo(expectedHeaderKey), equalTo(expectedHeaderValue)));
+        assertThat(received.getDestination(), equalTo(String.format("/%s", destination)));
+        assertThat(received.getBody().toString(), equalTo(body.toString()));
+        assertThat(received.getHeaders(), hasEntry(equalTo(headerKey), equalTo(headerValue)));
 
         //
         return null;
@@ -79,14 +79,14 @@ public class NoSuffixNoUserTest extends AbstractTestBase {
     }).when(mso).convertAndSend(anyString(), anyObject(), anyMapOf(String.class, Object.class));
 
     Map<String, Object> headers = new HashMap<>();
-    headers.put(expectedHeaderKey, expectedHeaderValue);
+    headers.put(headerKey, headerValue);
 
     MockEndpoint mock = getMockEndpoint("mock:result");
     mock.expectedMessageCount(1);
-    mock.expectedBodiesReceived(expectedBody);
-    mock.expectedHeaderReceived(expectedHeaderKey, expectedHeaderValue);
+    mock.expectedBodiesReceived(body);
+    mock.expectedHeaderReceived(headerKey, headerValue);
 
-    producer.sendBodyAndHeaders(expectedBody, headers);
+    producer.sendBodyAndHeaders(body, headers);
 
     assertMockEndpointsSatisfied();
   }
@@ -99,7 +99,7 @@ public class NoSuffixNoUserTest extends AbstractTestBase {
     return new RouteBuilder() {
       public void configure() {
         from("direct://start")
-            .to(String.format("test-springsm://%s", expectedDestination))
+            .to(String.format("test-springsm://%s", destination))
             .to(String.format("log:%s?level=INFO&showBody=true&showHeaders=true", this.getClass().getName()))
             .to("mock:result");
       }

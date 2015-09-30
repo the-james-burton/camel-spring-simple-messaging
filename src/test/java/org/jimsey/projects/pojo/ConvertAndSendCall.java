@@ -10,14 +10,11 @@ public class ConvertAndSendCall {
 
   private final Object body;
 
-  private final String user;
-
-  public ConvertAndSendCall(String destination, Map<String, Object> headers, Object body, String user) {
+  public ConvertAndSendCall(String destination, Map<String, Object> headers, Object body) {
     super();
     this.destination = destination;
     this.headers = headers;
     this.body = body;
-    this.user = user;
   }
 
   // ---------------------------------
@@ -31,10 +28,6 @@ public class ConvertAndSendCall {
 
   public Object getBody() {
     return body;
-  }
-
-  public String getUser() {
-    return user;
   }
 
 }

@@ -11,14 +11,14 @@ import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.jimsey.projects.pojo.ConvertAndSendCall;
+import org.jimsey.projects.pojo.ConvertAndSendToUserCall;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 
-public class WithSuffixNoUserTest extends AbstractTestBase {
+public class WithSuffixWithUserTest extends AbstractTestBase {
 
   SimpMessageSendingOperations mso;
 
@@ -30,28 +30,30 @@ public class WithSuffixNoUserTest extends AbstractTestBase {
   }
 
   @Test
-  public void withSuffixNoUserTest() throws Exception {
+  public void withSuffixWithUserTest() throws Exception {
 
     // TODO use lambda when upgraded to java 8...
     doAnswer(new Answer<Void>() {
 
       @Override
       public Void answer(InvocationOnMock invocation) throws Throwable {
-        ConvertAndSendCall received = extractConvertAndSendParameters(invocation);
+        ConvertAndSendToUserCall received = extractConvertAndSendToUserParameters(invocation);
         assertThat(received.getDestination(),
             equalTo(String.format("/%s%s", destination, destinationSuffixHeaderValue)));
         assertThat(received.getBody().toString(), equalTo(body.toString()));
         assertThat(received.getHeaders(), hasEntry(equalTo(headerKey), equalTo(headerValue)));
         assertThat(received.getHeaders(), not(hasKey(equalTo(destinationSuffixHeaderKey))));
+        assertThat(received.getHeaders(), not(hasKey(equalTo(userHeaderKey))));
 
         return null;
       }
 
-    }).when(mso).convertAndSend(anyString(), anyObject(), anyMapOf(String.class, Object.class));
+    }).when(mso).convertAndSendToUser(anyString(), anyString(), anyObject(), anyMapOf(String.class, Object.class));
 
     Map<String, Object> headers = new HashMap<>();
     headers.put(headerKey, headerValue);
     headers.put(destinationSuffixHeaderKey, destinationSuffixHeaderValue);
+    headers.put(userHeaderKey, userHeaderValue);
 
     MockEndpoint mock = getMockEndpoint("mock:result");
     mock.expectedMessageCount(1);
@@ -71,8 +73,8 @@ public class WithSuffixNoUserTest extends AbstractTestBase {
     return new RouteBuilder() {
       public void configure() {
         from("direct://start")
-            .to(String.format("test-springsm://%s?destinationSuffixHeader=%s",
-                destination, destinationSuffixHeaderKey))
+            .to(String.format("test-springsm://%s?destinationSuffixHeader=%s&userHeader=%s",
+                destination, destinationSuffixHeaderKey, userHeaderKey))
             .to(String.format("log:%s?level=INFO&showBody=true&showHeaders=true", this.getClass().getName()))
             .to("mock:result");
       }
