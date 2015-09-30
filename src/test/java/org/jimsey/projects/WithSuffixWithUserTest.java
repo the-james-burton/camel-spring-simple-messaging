@@ -40,6 +40,7 @@ public class WithSuffixWithUserTest extends AbstractTestBase {
         ConvertAndSendToUserCall received = extractConvertAndSendToUserParameters(invocation);
         assertThat(received.getDestination(),
             equalTo(String.format("/%s%s", destination, destinationSuffixHeaderValue)));
+        assertThat(received.getUser(), equalTo(userHeaderValue));
         assertThat(received.getBody().toString(), equalTo(body.toString()));
         assertThat(received.getHeaders(), hasEntry(equalTo(headerKey), equalTo(headerValue)));
         assertThat(received.getHeaders(), not(hasKey(equalTo(destinationSuffixHeaderKey))));
