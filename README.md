@@ -1,4 +1,4 @@
-# camel-spring-simple-messaging [![Build Status](https://api.travis-ci.org/the-james-burton/atacama.svg?branch=master)](https://travis-ci.org/the-james-burton/camel-spring-simple-messaging)
+# camel-spring-simple-messaging [![Build Status](https://api.travis-ci.org/the-james-burton/camel-spring-simple-messaging.svg?branch=master)](https://travis-ci.org/the-james-burton/camel-spring-simple-messaging)
 
 ### Camel spring simple messaging component
 
