@@ -10,7 +10,6 @@ This is useful when you want to send (for example) STOMP messages over websocket
 
 ### How to use it
 
-
 A sample `configure` method implementation in your Camel `RouteBuilder` might look like the below. Your implementation of `AbstractWebSocketMessageBrokerConfigurer` will inject the `SimpMessagingTemplate`.
 
 
@@ -31,9 +30,11 @@ public void configure() throws Exception {
 
 ### URI format
 
-    <name>://destinaton
+```
+<name>://destinaton
+```
 
-Where `<name>` is the name you gave it when you added the component and destination` is where you want to send it to via the Spring `SimpMessageSendingOperations.convertAndSend` methods. See the options below for how to customise the destination dynamically, via a header.
+Where `<name>` is the name you gave it when you added the component and `destination` is where you want to send it to via the Spring `SimpMessageSendingOperations.convertAndSend` methods. See the options below for how to customise the destination dynamically, via a header.
 
 ### Options
 
@@ -47,7 +48,6 @@ Header | Value
 --- | ---
 SpringSimpleMessagingConstants.DESTINATION_SUFFIX | An optional suffix to add to the destination. Useful to control message routing dynamically.
 SpringSimpleMessagingConstants.USER | If present, the component will call the `convertAndSendTouser` message on the `SimpMessagingTemplate`.
-
 
 ### How to build
 
