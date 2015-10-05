@@ -54,7 +54,7 @@ These messaging control headers are removed before sending to the `SimpMessaging
 Header | Value
 --- | ---
 `SpringSimpleMessagingConstants.DESTINATION_SUFFIX` | An optional suffix to add to the destination. Useful to control message routing dynamically.
-`SpringSimpleMessagingConstants.USER` | If present, the component will call the `convertAndSendToUser` message on the `SimpMessagingTemplate`.
+`SpringSimpleMessagingConstants.USER` | If present, the component will call the `convertAndSendToUser` message on the `SimpMessagingTemplate` with the `user` parameter set to the value of this header. If not present then the `convertAndSend` method will be used instead, which does not require a `user` parameter.
 
 ### How to build
 
