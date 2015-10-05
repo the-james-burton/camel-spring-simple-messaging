@@ -79,12 +79,12 @@
       <artifactId>junit</artifactId>
       <version>${junit.version}</version>
       <scope>test</scope>
-<!--       <exclusions> -->
-<!--         <exclusion> -->
-<!--           <groupId>org.hamcrest</groupId> -->
-<!--           <artifactId>hamcrest-core</artifactId> -->
-<!--         </exclusion> -->
-<!--       </exclusions> -->
+      <!-- <exclusions> -->
+      <!-- <exclusion> -->
+      <!-- <groupId>org.hamcrest</groupId> -->
+      <!-- <artifactId>hamcrest-core</artifactId> -->
+      <!-- </exclusion> -->
+      <!-- </exclusions> -->
     </dependency>
     <dependency>
       <groupId>org.apache.camel</groupId>
@@ -97,12 +97,12 @@
       <artifactId>mockito-core</artifactId>
       <version>${mockito.version}</version>
       <scope>test</scope>
-<!--       <exclusions> -->
-<!--         <exclusion> -->
-<!--           <groupId>org.hamcrest</groupId> -->
-<!--           <artifactId>hamcrest-core</artifactId> -->
-<!--         </exclusion> -->
-<!--       </exclusions> -->
+      <!-- <exclusions> -->
+      <!-- <exclusion> -->
+      <!-- <groupId>org.hamcrest</groupId> -->
+      <!-- <artifactId>hamcrest-core</artifactId> -->
+      <!-- </exclusion> -->
+      <!-- </exclusions> -->
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -126,7 +126,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.5.1</version>
+        <version>3.3</version>
         <configuration>
           <source>1.7</source>
           <target>1.7</target>
@@ -136,7 +136,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
-        <version>2.6</version>
+        <version>2.7</version>
         <configuration>
           <encoding>UTF-8</encoding>
         </configuration>
@@ -146,7 +146,7 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <version>2.3.7</version>
+        <version>2.5.4</version>
         <extensions>true</extensions>
         <configuration>
           <instructions>
@@ -154,6 +154,34 @@
             <Export-Service>org.apache.camel.spi.ComponentResolver;component=springsm</Export-Service>
           </instructions>
         </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>2.4</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.10.3</version>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
 
     </plugins>
