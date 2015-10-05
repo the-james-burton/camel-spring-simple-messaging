@@ -12,7 +12,6 @@ This is useful when you want to send (for example) STOMP messages over websocket
 
 A sample `configure` method implementation in your Camel `RouteBuilder` might look like the below. Your implementation of `AbstractWebSocketMessageBrokerConfigurer` will inject the `SimpMessagingTemplate`.
 
-
 ```java
 @Autowired
 private SimpMessagingTemplate template;
@@ -27,6 +26,10 @@ public void configure() throws Exception {
   .end();
 }
 ```
+
+This component will use the camel exchange `in` body as the `SimpMessagingTemplate` payload. There are no special requirements for the payload beyond simply being a java `Object`.
+
+This component will also pass through all headers, including Camel headers except for the control headers documented below.
 
 ### URI format
 
