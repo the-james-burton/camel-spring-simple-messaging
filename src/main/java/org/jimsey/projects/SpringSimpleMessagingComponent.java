@@ -8,7 +8,55 @@ import org.apache.camel.impl.UriEndpointComponent;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 
 /**
- * Represents the component that manages {@link SpringSimpleMessagingEndpoint}.
+<strong>Camel spring simple messaging component</strong>
+<p>
+This is a component for apache camel that lets you send messages to an implementation of Spring's {@code SimpMessageSendingOperations}  such as {@code SimpMessagingTemplate} .
+<p>
+This is useful when you want to send (for example) STOMP messages over websockets using Spring (see Ch.21.4) when using Camel routes.
+<p>
+<em>This is a producer-only component. Consuming messages is not currently supported.</em>
+<p>
+<strong>How to use it</strong>
+<p>
+A sample {@code configure}  method implementation in your Camel {@code RouteBuilder}  might look like the below. Your implementation of {@code AbstractWebSocketMessageBrokerConfigurer}  will inject the {@code SimpMessagingTemplate} .
+<p>
+<pre><code>
+{@literal @}Autowired
+private SimpMessagingTemplate template;
+
+{@literal @}Override
+public void configure() throws Exception {
+
+  getContext().addComponent("ssm", new SpringSimpleMessagingComponent(template));
+
+  from("direct:your.message.source")
+  .to("ssm://topic/your.topic.name")
+  .end();
+}
+</code></pre>
+<p>
+This component will use the camel exchange {@code in}  body as the {@code SimpMessagingTemplate}  payload. There are no special requirements for the payload beyond simply being a java {@code Object} .
+<p>
+This component will also pass through all headers, including Camel headers except for the control headers documented below.
+<p>
+<strong>URI format</strong>
+<pre>{@code
+<name>://destinaton
+}</pre>
+<p>
+Where {@code <name>} is the name you gave it when you added the component and {@code destination}  is where you want to send it to via the Spring {@code SimpMessageSendingOperations.convertAndSend}  methods. See the options below for how to customise the destination dynamically, via a header.
+<p>
+<strong>Options</strong>
+<p>
+There are no URI options in this component.
+<p>
+<strong>Headers</strong>
+<p>
+These messaging control headers are removed before sending to the {@code SimpMessagingTemplate} . All other headers will remain on the message.
+<p>
+{@code SpringSimpleMessagingConstants.DESTINATION_SUFFIX} : An optional suffix to add to the destination. Useful to control message routing dynamically.
+<p>
+{@code SpringSimpleMessagingConstants.USER} : If present, the component will call the {@code convertAndSendToUser}  message on the {@code SimpMessagingTemplate}  with the {@code user}  parameter set to the value of this header. If not present then the {@code convertAndSend}  method will be used instead, which does not require a {@code user}  parameter.
  */
 public class SpringSimpleMessagingComponent extends UriEndpointComponent {
 
