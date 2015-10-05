@@ -21,13 +21,9 @@ public class AbstractTestBase extends CamelTestSupport {
 
   protected final Object headerValue = "test-header-value";
 
-  protected final String destinationSuffixHeaderKey = "suffix";
+  protected final String destinationSuffix = ".test.suffix";
 
-  protected final String destinationSuffixHeaderValue = ".test.suffix";
-
-  protected final String userHeaderKey = "user";
-
-  protected final String userHeaderValue = "test-user";
+  protected final String user = "test-user";
 
   protected ConvertAndSendCall extractConvertAndSendParameters(InvocationOnMock invocation) {
     assertThat(Arrays.asList(invocation.getArguments()), hasSize(3));

@@ -29,14 +29,6 @@ public class SpringSimpleMessagingEndpoint extends DefaultEndpoint {
   /** the destination **/
   private String destination;
 
-  /** the header in which to find the destination suffix, optional **/
-  @UriParam
-  private String destinationSuffixHeader;
-
-  /** the header in which to find the user, optional **/
-  @UriParam
-  private String userHeader;
-
   public SpringSimpleMessagingEndpoint() {
   }
 
@@ -92,22 +84,6 @@ public class SpringSimpleMessagingEndpoint extends DefaultEndpoint {
 
   public void setDestination(String destination) {
     this.destination = destination;
-  }
-
-  public String getDestinationSuffixHeader() {
-    return destinationSuffixHeader;
-  }
-
-  public void setDestinationSuffixHeader(String destinationSuffixHeader) {
-    this.destinationSuffixHeader = destinationSuffixHeader;
-  }
-
-  public String getUserHeader() {
-    return userHeader;
-  }
-
-  public void setUserHeader(String userHeader) {
-    this.userHeader = userHeader;
   }
 
 }

@@ -13,13 +13,14 @@ import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.jimsey.projects.pojo.ConvertAndSendCall;
+import org.jimsey.projects.pojo.ConvertAndSendToUserCall;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 
-public class NoSuffixNoUserTest extends AbstractTestBase {
+public class SpringSimpleMessagingComponentTest extends AbstractTestBase {
 
   SimpMessageSendingOperations mso;
 
@@ -80,6 +81,77 @@ public class NoSuffixNoUserTest extends AbstractTestBase {
 
     Map<String, Object> headers = new HashMap<>();
     headers.put(headerKey, headerValue);
+
+    MockEndpoint mock = getMockEndpoint("mock:result");
+    mock.expectedMessageCount(1);
+    mock.expectedBodiesReceived(body);
+    mock.expectedHeaderReceived(headerKey, headerValue);
+
+    producer.sendBodyAndHeaders(body, headers);
+
+    assertMockEndpointsSatisfied();
+  }
+
+  @Test
+  public void withSuffixNoUserTest() throws Exception {
+
+    // TODO use lambda when upgraded to java 8...
+    doAnswer(new Answer<Void>() {
+
+      @Override
+      public Void answer(InvocationOnMock invocation) throws Throwable {
+        ConvertAndSendCall received = extractConvertAndSendParameters(invocation);
+        assertThat(received.getDestination(),
+            equalTo(String.format("/%s%s", destination, destinationSuffix)));
+        assertThat(received.getBody().toString(), equalTo(body.toString()));
+        assertThat(received.getHeaders(), hasEntry(equalTo(headerKey), equalTo(headerValue)));
+        assertThat(received.getHeaders(), not(hasKey(equalTo(SpringSimpleMessagingConstants.DESTINATION_SUFFIX))));
+
+        return null;
+      }
+
+    }).when(mso).convertAndSend(anyString(), anyObject(), anyMapOf(String.class, Object.class));
+
+    Map<String, Object> headers = new HashMap<>();
+    headers.put(headerKey, headerValue);
+    headers.put(SpringSimpleMessagingConstants.DESTINATION_SUFFIX, destinationSuffix);
+
+    MockEndpoint mock = getMockEndpoint("mock:result");
+    mock.expectedMessageCount(1);
+    mock.expectedBodiesReceived(body);
+    mock.expectedHeaderReceived(headerKey, headerValue);
+
+    producer.sendBodyAndHeaders(body, headers);
+
+    assertMockEndpointsSatisfied();
+  }
+
+  @Test
+  public void withSuffixWithUserTest() throws Exception {
+
+    // TODO use lambda when upgraded to java 8...
+    doAnswer(new Answer<Void>() {
+
+      @Override
+      public Void answer(InvocationOnMock invocation) throws Throwable {
+        ConvertAndSendToUserCall received = extractConvertAndSendToUserParameters(invocation);
+        assertThat(received.getDestination(),
+            equalTo(String.format("/%s%s", destination, destinationSuffix)));
+        assertThat(received.getUser(), equalTo(user));
+        assertThat(received.getBody().toString(), equalTo(body.toString()));
+        assertThat(received.getHeaders(), hasEntry(equalTo(headerKey), equalTo(headerValue)));
+        assertThat(received.getHeaders(), not(hasKey(equalTo(SpringSimpleMessagingConstants.DESTINATION_SUFFIX))));
+        assertThat(received.getHeaders(), not(hasKey(equalTo(SpringSimpleMessagingConstants.USER))));
+
+        return null;
+      }
+
+    }).when(mso).convertAndSendToUser(anyString(), anyString(), anyObject(), anyMapOf(String.class, Object.class));
+
+    Map<String, Object> headers = new HashMap<>();
+    headers.put(headerKey, headerValue);
+    headers.put(SpringSimpleMessagingConstants.DESTINATION_SUFFIX, destinationSuffix);
+    headers.put(SpringSimpleMessagingConstants.USER, user);
 
     MockEndpoint mock = getMockEndpoint("mock:result");
     mock.expectedMessageCount(1);

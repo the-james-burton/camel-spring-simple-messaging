@@ -29,16 +29,16 @@ public class SpringSimpleMessagingProducer extends DefaultProducer {
     Map<String, Object> headers = message.getHeaders();
 
     String destination = endpoint.getDestination();
-    String destinationSuffix = getHeader(headers, endpoint.getDestinationSuffixHeader());
-    String user = getHeader(headers, endpoint.getUserHeader());
+    String destinationSuffix = getHeader(headers, SpringSimpleMessagingConstants.DESTINATION_SUFFIX);
+    String user = getHeader(headers, SpringSimpleMessagingConstants.USER);
 
     if (destinationSuffix != null) {
       destination = destination.concat(destinationSuffix);
-      message.removeHeader(endpoint.getDestinationSuffixHeader());
+      message.removeHeader(SpringSimpleMessagingConstants.DESTINATION_SUFFIX);
     }
 
     if (user != null) {
-      message.removeHeader(endpoint.getUserHeader());
+      message.removeHeader(SpringSimpleMessagingConstants.USER);
     }
 
     if (LOG.isDebugEnabled()) {
