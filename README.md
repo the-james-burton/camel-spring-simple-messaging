@@ -8,6 +8,10 @@ This is useful when you want to send (for example) STOMP messages over websocket
 
  > This is a producer-only component. Consuming messages is not currently supported.
 
+### How to get it
+
+Publishing to maven central is pending. For now, please just download the release jar.
+
 ### How to use it
 
 A sample `configure` method implementation in your Camel `RouteBuilder` might look like the below. Your implementation of `AbstractWebSocketMessageBrokerConfigurer` will inject the `SimpMessagingTemplate`.
@@ -49,8 +53,8 @@ These messaging control headers are removed before sending to the `SimpMessaging
 
 Header | Value
 --- | ---
-SpringSimpleMessagingConstants.DESTINATION_SUFFIX | An optional suffix to add to the destination. Useful to control message routing dynamically.
-SpringSimpleMessagingConstants.USER | If present, the component will call the `convertAndSendTouser` message on the `SimpMessagingTemplate`.
+`SpringSimpleMessagingConstants.DESTINATION_SUFFIX` | An optional suffix to add to the destination. Useful to control message routing dynamically.
+`SpringSimpleMessagingConstants.USER` | If present, the component will call the `convertAndSendToUser` message on the `SimpMessagingTemplate`.
 
 ### How to build
 
