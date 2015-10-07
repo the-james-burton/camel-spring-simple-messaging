@@ -82,13 +82,13 @@ These messaging control headers are removed before sending to the {@code SimpMes
 public class SpringSimpleMessagingComponent extends UriEndpointComponent {
 
   /** the spring simple messaging template to use when sending messages */
-  private SimpMessageSendingOperations mso;
+  private SimpMessageSendingOperations messageSendingOperations;
 
   /** main constructor to use 
    * @param mso the message sending implementation to use */
   public SpringSimpleMessagingComponent(SimpMessageSendingOperations mso) {
     this();
-    this.setMso(mso);
+    this.setMessageSendingOperations(mso);
   }
 
   public SpringSimpleMessagingComponent() {
@@ -102,17 +102,17 @@ public class SpringSimpleMessagingComponent extends UriEndpointComponent {
   protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) throws Exception {
     SpringSimpleMessagingEndpoint endpoint = new SpringSimpleMessagingEndpoint(uri, this);
     setProperties(endpoint, parameters);
-    endpoint.setMessageSendingOperations(mso);
-    endpoint.setDestination("/".concat(remaining));
+    endpoint.setMessageSendingOperations(messageSendingOperations);
+    endpoint.setDestination(remaining);
     return endpoint;
   }
 
   // --------------------------------------------------------
-  public SimpMessageSendingOperations getMso() {
-    return mso;
+  public SimpMessageSendingOperations getMessageSendingOperations() {
+    return messageSendingOperations;
   }
 
-  public void setMso(SimpMessageSendingOperations mso) {
-    this.mso = mso;
+  public void setMessageSendingOperations(SimpMessageSendingOperations mso) {
+    this.messageSendingOperations = mso;
   }
 }

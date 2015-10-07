@@ -46,7 +46,7 @@ public class SpringSimpleMessagingEndpoint extends DefaultEndpoint {
   private int option = 10;
 
   /** the spring simple messaging template to use when sending messages */
-  private SimpMessageSendingOperations mso;
+  private SimpMessageSendingOperations messageSendingOperations;
 
   /** the destination **/
   private String destination;
@@ -56,10 +56,6 @@ public class SpringSimpleMessagingEndpoint extends DefaultEndpoint {
 
   public SpringSimpleMessagingEndpoint(String uri, SpringSimpleMessagingComponent component) {
     super(uri, component);
-  }
-
-  public SpringSimpleMessagingEndpoint(String endpointUri) {
-    super(endpointUri);
   }
 
   public Producer createProducer() throws Exception {
@@ -93,11 +89,11 @@ public class SpringSimpleMessagingEndpoint extends DefaultEndpoint {
   }
 
   public SimpMessageSendingOperations getMessageSendingOperations() {
-    return mso;
+    return messageSendingOperations;
   }
 
   public void setMessageSendingOperations(SimpMessageSendingOperations mso) {
-    this.mso = mso;
+    this.messageSendingOperations = mso;
   }
 
   public String getDestination() {

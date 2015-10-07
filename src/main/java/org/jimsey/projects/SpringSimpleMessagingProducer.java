@@ -65,7 +65,7 @@ public class SpringSimpleMessagingProducer extends DefaultProducer {
 
     if (LOG.isDebugEnabled()) {
       try {
-        LOG.debug("seding message: {\"destination\":{}, \"payload\":{}, \"headers\":{}, \"user\":{}}",
+        LOG.debug("sending message: {\"destination\":{}, \"payload\":{}, \"headers\":{}, \"user\":{}}",
             destination, payload, new JSONObject(headers), user);
       } catch (Exception e) {
         LOG.error("error trying to log body or header: {}", e.getMessage());
