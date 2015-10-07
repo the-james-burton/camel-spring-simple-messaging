@@ -63,7 +63,7 @@ public class SpringSimpleMessagingComponentTest extends AbstractTestBase {
       public Void answer(InvocationOnMock invocation) throws Throwable {
         ConvertAndSendCall received = extractConvertAndSendParameters(invocation);
         assertThat(received.getDestination(),
-            equalTo(String.format("/%s", destination)));
+            equalTo(String.format("%s", destination)));
         assertThat(received.getBody().toString(), equalTo(body.toString()));
         assertThat(received.getHeaders(), hasKey(equalTo(Exchange.BREADCRUMB_ID)));
         assertThat(received.getHeaders().keySet(), hasSize(1));
@@ -91,7 +91,7 @@ public class SpringSimpleMessagingComponentTest extends AbstractTestBase {
       @Override
       public Void answer(InvocationOnMock invocation) throws Throwable {
         ConvertAndSendCall received = extractConvertAndSendParameters(invocation);
-        assertThat(received.getDestination(), equalTo(String.format("/%s", destination)));
+        assertThat(received.getDestination(), equalTo(String.format("%s", destination)));
         assertThat(received.getBody().toString(), equalTo(body.toString()));
         assertThat(received.getHeaders(), hasEntry(equalTo(headerKey), equalTo(headerValue)));
 
@@ -124,7 +124,7 @@ public class SpringSimpleMessagingComponentTest extends AbstractTestBase {
       public Void answer(InvocationOnMock invocation) throws Throwable {
         ConvertAndSendCall received = extractConvertAndSendParameters(invocation);
         assertThat(received.getDestination(),
-            equalTo(String.format("/%s%s", destination, destinationSuffix)));
+            equalTo(String.format("%s%s", destination, destinationSuffix)));
         assertThat(received.getBody().toString(), equalTo(body.toString()));
         assertThat(received.getHeaders(), hasEntry(equalTo(headerKey), equalTo(headerValue)));
         assertThat(received.getHeaders(), not(hasKey(equalTo(SpringSimpleMessagingConstants.DESTINATION_SUFFIX))));
@@ -158,7 +158,7 @@ public class SpringSimpleMessagingComponentTest extends AbstractTestBase {
       public Void answer(InvocationOnMock invocation) throws Throwable {
         ConvertAndSendToUserCall received = extractConvertAndSendToUserParameters(invocation);
         assertThat(received.getDestination(),
-            equalTo(String.format("/%s%s", destination, destinationSuffix)));
+            equalTo(String.format("%s%s", destination, destinationSuffix)));
         assertThat(received.getUser(), equalTo(user));
         assertThat(received.getBody().toString(), equalTo(body.toString()));
         assertThat(received.getHeaders(), hasEntry(equalTo(headerKey), equalTo(headerValue)));

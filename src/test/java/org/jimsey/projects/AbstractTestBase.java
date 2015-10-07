@@ -35,7 +35,7 @@ import org.mockito.invocation.InvocationOnMock;
 
 public class AbstractTestBase extends CamelTestSupport {
 
-  protected final String destination = "test/uri";
+  protected final String destination = "/test/uri";
 
   protected final Object body = "test-body";
 
