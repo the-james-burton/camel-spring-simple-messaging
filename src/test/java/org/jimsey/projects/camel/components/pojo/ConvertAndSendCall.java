@@ -20,22 +20,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.jimsey.projects.pojo;
+package org.jimsey.projects.camel.components.pojo;
 
 import java.util.Map;
 
-public class ConvertAndSendToUserCall extends ConvertAndSendCall {
+public class ConvertAndSendCall {
 
-  private final String user;
+  private final String destination;
 
-  public ConvertAndSendToUserCall(String destination, Map<String, Object> headers, Object body, String user) {
-    super(destination, headers, body);
-    this.user = user;
+  private final Map<String, Object> headers;
+
+  private final Object body;
+
+  public ConvertAndSendCall(String destination, Map<String, Object> headers, Object body) {
+    super();
+    this.destination = destination;
+    this.headers = headers;
+    this.body = body;
   }
 
   // ---------------------------------
-  public String getUser() {
-    return user;
+  public String getDestination() {
+    return destination;
+  }
+
+  public Map<String, Object> getHeaders() {
+    return headers;
+  }
+
+  public Object getBody() {
+    return body;
   }
 
 }

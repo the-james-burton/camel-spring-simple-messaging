@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.jimsey.projects;
+package org.jimsey.projects.camel.components;
 
 import static org.hamcrest.Matchers.*;
 
@@ -28,8 +28,8 @@ import java.util.Arrays;
 import java.util.Map;
 
 import org.apache.camel.test.junit4.CamelTestSupport;
-import org.jimsey.projects.pojo.ConvertAndSendCall;
-import org.jimsey.projects.pojo.ConvertAndSendToUserCall;
+import org.jimsey.projects.camel.components.pojo.ConvertAndSendCall;
+import org.jimsey.projects.camel.components.pojo.ConvertAndSendToUserCall;
 import org.json.JSONObject;
 import org.mockito.invocation.InvocationOnMock;
 

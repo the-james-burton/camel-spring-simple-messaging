@@ -20,7 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.jimsey.projects;
+package org.jimsey.projects.camel.components;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Matchers.*;
@@ -34,8 +34,10 @@ import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
-import org.jimsey.projects.pojo.ConvertAndSendCall;
-import org.jimsey.projects.pojo.ConvertAndSendToUserCall;
+import org.jimsey.projects.camel.components.SpringSimpleMessagingComponent;
+import org.jimsey.projects.camel.components.SpringSimpleMessagingConstants;
+import org.jimsey.projects.camel.components.pojo.ConvertAndSendCall;
+import org.jimsey.projects.camel.components.pojo.ConvertAndSendToUserCall;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;

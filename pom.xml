@@ -6,12 +6,12 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.jimsey.projects</groupId>
+  <groupId>org.jimsey.projects.camel.components</groupId>
   <artifactId>camel-spring-simple-messaging</artifactId>
   <packaging>jar</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.0</version>
 
-  <name>Camel CamelSpringSimpleMessaging Component</name>
+  <name>CamelSpringSimpleMessaging Component</name>
   <description>An Apache Camel component for sending messages via Spring's SimpMessageSendingOperations, such as STOMP over websockets.</description>
   <url>https://github.com/the-james-burton/camel-spring-simple-messaging</url>
   <inceptionYear>2015</inceptionYear>
