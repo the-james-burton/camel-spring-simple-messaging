@@ -10,7 +10,15 @@ This is useful when you want to send (for example) STOMP messages over websocket
 
 ### How to get it
 
-Publishing to maven central is pending. For now, please just download the release jar.
+It is available in maven central repo here...
+
+```xml
+<dependency>
+    <groupId>org.jimsey.projects.camel.components</groupId>
+    <artifactId>camel-spring-simple-messaging</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
 
 ### How to use it
 
