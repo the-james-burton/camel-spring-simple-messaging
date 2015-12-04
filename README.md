@@ -67,3 +67,9 @@ Header | Value
 ### How to build
 
 Run `mvn install`
+
+### How to contribute
+
+The [Spring API](https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/messaging/simp/SimpMessageSendingOperations.html) for this is very small, so I don't expect much needs to change for a while. However, anyone is more than welcome to submit a pull request and I will check it, merge it in and release it to maven central. 
+
+I am also happy to add additional contributors who submit more than one pull request and/or have bigger plans for this component than I do.
