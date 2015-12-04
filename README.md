@@ -4,7 +4,7 @@
 
 This is a component for apache camel that lets you send messages to an implementation of Spring's `SimpMessageSendingOperations` such as `SimpMessagingTemplate`.
 
-This is useful when you want to send (for example) STOMP messages over websockets using Spring (see Ch.21.4) when using Camel routes.
+This is useful when you want to send (for example) STOMP messages over websockets using [Spring](http://docs.spring.io/spring/docs/current/spring-framework-reference/html/websocket.html) when using Camel routes.
 
  > This is a producer-only component. Consuming messages is not currently supported.
 
